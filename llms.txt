@@ -1,0 +1,32 @@
+# The Tony Hawk Paradox
+
+> A nonfiction book by David Borish arguing that video games and simulations
+> have repeatedly predicted real-world capability before it existed, built
+> into a documented, evidence-based case for simulation theory with
+> falsifiable predictions.
+
+The Tony Hawk Paradox is not fiction. The argument centers on a documented
+pattern: capabilities appear first in games and simulations, then later in
+physical reality. Examples include the 1080-degree skateboard spin (fantasy
+in a 1999 video game, first landed in 2012) and Demis Hassabis's description
+of DeepMind mastering games before real-world problems. The book extends
+this into predictions about AI, robotics, brain-computer interfaces, and
+virtual reality, each with an explicit date and falsification condition.
+
+## Author
+
+David Borish is an AI strategist and writer. He developed the Open-Prem
+Inflection Point framework and the Exponential Replacement Curve for AI
+capability timelines, and has a track record of publicly documented,
+validated predictions.
+
+## Links
+
+- Website: https://davidborish.com
+- Author writing: https://www.davidborish.com/the-ai-spectator
+- Book page: https://tonyhawkparadox.com/
+
+## Note
+
+A release date has not been announced. Visitors can sign up on the book
+page to be notified.

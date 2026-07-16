@@ -1,0 +1,756 @@
+/* ==========================================================================
+   The Tony Hawk Paradox - launch site
+   Palette matched to the book cover: deep navy space, electric blue accents.
+   ========================================================================== */
+
+:root {
+  --bg: #04060d;
+  --navy: #0a1226;
+  --blue: #1a6dff;
+  --blue-bright: #2b8cff;
+  --blue-dim: rgba(43, 140, 255, 0.28);
+  --ink: #f2f6ff;
+  --dim: #8ea6cf;
+  --panel-bg: rgba(7, 12, 26, 0.72);
+  --display: 'Michroma', sans-serif;
+  --body: 'Saira', sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: auto; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--body);
+  font-weight: 300;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap;
+}
+
+/* ---------- fixed 3D stage ---------- */
+
+/* ---------- skyline background ----------
+   Sits behind the transparent WebGL canvas. Fixed so it parallaxes against
+   the scrolling content. EDIT: swap assets/skyline.jpg to change the art. */
+
+#skyline {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background: url('assets/skyline.jpg?v=2') center bottom / cover no-repeat;
+  background-color: var(--bg);
+  will-change: transform;   /* animated on scroll: see main.js parallax */
+}
+
+/* Scrim: darkens the sky at the top and the buildings behind the text column
+   so the skater and the chapter panels stay readable over the art. */
+#skyline::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(4,6,13,0.55) 0%, rgba(4,6,13,0.15) 35%, rgba(4,6,13,0.0) 55%),
+    linear-gradient(90deg, rgba(4,6,13,0.85) 0%, rgba(4,6,13,0.5) 32%, rgba(4,6,13,0.0) 58%);
+}
+
+#stage {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  display: block;
+  background: transparent;   /* skyline shows through */
+}
+
+/* Static fallback when WebGL is not available */
+#webgl-fallback {
+  display: none;   /* the skyline background covers this case now */
+}
+.no-webgl #stage { display: none; }
+.no-webgl #webgl-fallback { display: block; }
+.no-webgl .hero {
+  background: url('assets/cover.png?v=2') center / cover no-repeat;
+}
+.no-webgl .hero::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(4,6,13,0.2), rgba(4,6,13,0.92));
+}
+.no-webgl .hero-lockup { position: relative; z-index: 1; }
+
+/* ---------- landing flash ---------- */
+
+#flash {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: radial-gradient(circle at 50% 70%, rgba(120, 180, 255, 0.9), rgba(26, 109, 255, 0.35) 45%, transparent 75%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ---------- HUD spin counter ---------- */
+
+#hud {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 30;
+  text-align: right;
+  font-family: var(--display);
+  pointer-events: none;
+  user-select: none;
+}
+.hud-label {
+  font-size: 9px;
+  letter-spacing: 0.35em;
+  color: var(--dim);
+}
+.hud-deg {
+  font-size: 20px;
+  color: var(--blue-bright);
+  text-shadow: 0 0 12px rgba(43, 140, 255, 0.6);
+  font-variant-numeric: tabular-nums;
+}
+.hud-meter {
+  margin-top: 6px;
+  margin-left: auto;
+  width: 72px;
+  height: 3px;
+  background: rgba(43, 140, 255, 0.15);
+  border-radius: 2px;
+  overflow: hidden;
+}
+#hud-fill {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, var(--blue), var(--blue-bright));
+  box-shadow: 0 0 8px rgba(43, 140, 255, 0.8);
+}
+.hud-milestone {
+  margin-top: 6px;
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  color: var(--ink);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.hud-milestone.show { opacity: 1; }
+
+/* ---------- content column ---------- */
+
+#content {
+  /* No position/z-index here on purpose: giving #content itself a stacking
+     context would force ALL its children (including .pull-quote) to paint
+     as one block above #stage. Instead each child that needs to stay above
+     the canvas gets its own z-index below, while .pull-quote deliberately
+     gets none -- see the pull-quote comment near the bottom of this file
+     for why. */
+}
+
+/* ---------- hero ---------- */
+
+.hero {
+  position: relative;
+  z-index: 10;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 0 8vw;
+}
+
+.hero-lockup { max-width: 620px; }
+
+.hero-the {
+  font-family: var(--display);
+  font-size: clamp(14px, 1.6vw, 20px);
+  letter-spacing: 0.6em;
+  color: var(--ink);
+  padding-left: 4px;
+}
+.hero-title {
+  font-family: var(--display);
+  font-size: clamp(52px, 9vw, 120px);
+  line-height: 0.95;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+  text-shadow: 0 0 40px rgba(26, 109, 255, 0.25);
+  margin: 8px 0;
+}
+.hero-paradox {
+  font-family: var(--display);
+  font-size: clamp(20px, 3.4vw, 44px);
+  color: var(--blue-bright);
+  text-shadow: 0 0 24px rgba(43, 140, 255, 0.55);
+  letter-spacing: 0.18em;
+}
+.hero-sub {
+  margin-top: 20px;
+  font-family: var(--display);
+  font-size: clamp(10px, 1.2vw, 14px);
+  letter-spacing: 0.3em;
+  color: var(--dim);
+}
+.hero-byline {
+  margin-top: 10px;
+  font-family: var(--display);
+  font-size: clamp(10px, 1.1vw, 13px);
+  letter-spacing: 0.3em;
+  color: var(--blue-bright);
+}
+
+.scroll-hint {
+  position: absolute;
+  bottom: 32px;
+  left: 8vw;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-family: var(--display);
+  font-size: 9px;
+  letter-spacing: 0.4em;
+  color: var(--dim);
+}
+.scroll-hint-line {
+  display: block;
+  width: 1px;
+  height: 44px;
+  background: linear-gradient(180deg, var(--blue-bright), transparent);
+  animation: hint-drop 2.2s ease-in-out infinite;
+}
+@keyframes hint-drop {
+  0%   { transform: scaleY(0); transform-origin: top; }
+  50%  { transform: scaleY(1); transform-origin: top; }
+  51%  { transform-origin: bottom; }
+  100% { transform: scaleY(0); transform-origin: bottom; }
+}
+
+/* ---------- part dividers ---------- */
+
+.part-divider {
+  padding: 14vh 8vw 4vh;
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+  max-width: 760px;
+}
+.part-divider span {
+  font-family: var(--display);
+  font-size: 11px;
+  letter-spacing: 0.35em;
+  color: var(--blue-bright);
+  white-space: nowrap;
+}
+.part-divider em {
+  font-style: normal;
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  color: var(--dim);
+  border-bottom: 1px solid var(--blue-dim);
+  padding-bottom: 6px;
+  flex: 1;
+}
+
+/* ---------- chapter panels ---------- */
+
+.chapter {
+  position: relative;
+  z-index: 10;
+  min-height: 78vh;
+  display: flex;
+  align-items: center;
+  padding: 6vh 8vw;
+}
+
+.panel {
+  position: relative;
+  width: min(560px, 100%);
+  padding: 30px 32px 34px;
+  background: var(--panel-bg);
+  border: 1px solid var(--blue-dim);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+/* corner ticks, a quiet nod to game UI framing */
+.panel::before,
+.panel::after {
+  content: '';
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-color: var(--blue-bright);
+  border-style: solid;
+}
+.panel::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
+.panel::after  { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
+
+.panel-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.level {
+  font-family: var(--display);
+  font-size: 11px;
+  letter-spacing: 0.35em;
+  color: var(--blue-bright);
+  border: 1px solid var(--blue-dim);
+  padding: 6px 10px 5px 13px;
+  text-shadow: 0 0 10px rgba(43, 140, 255, 0.5);
+}
+
+.icon svg, .icon img {
+  width: 52px;
+  height: 52px;
+  display: block;
+}
+.icon svg {
+  stroke: var(--blue-bright);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 6px rgba(43, 140, 255, 0.55));
+}
+
+.panel h2 {
+  font-family: var(--display);
+  font-size: clamp(17px, 2vw, 22px);
+  line-height: 1.35;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+  margin-bottom: 12px;
+}
+
+.teaser {
+  font-size: 15.5px;
+  line-height: 1.65;
+  color: var(--dim);
+  max-width: 44ch;
+}
+
+.panel-epilogue { border-style: dashed; }
+
+/* assembly particles injected by JS during the render-in effect */
+.assembly-dot {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--blue-bright);
+  box-shadow: 0 0 6px rgba(43, 140, 255, 0.9);
+  pointer-events: none;
+}
+
+/* ---------- landing + signup ---------- */
+
+.landing {
+  position: relative;
+  z-index: 10;
+  min-height: 150vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0 6vw 5vh;
+}
+
+.signup {
+  width: min(520px, 100%);
+  text-align: center;
+  padding: 38px 34px 34px;
+  background: linear-gradient(180deg, rgba(10, 18, 40, 0.9), rgba(6, 10, 24, 0.95));
+  border: 1px solid rgba(43, 140, 255, 0.45);
+  box-shadow:
+    0 0 40px rgba(26, 109, 255, 0.25),
+    0 0 120px rgba(26, 109, 255, 0.12),
+    inset 0 1px 0 rgba(43, 140, 255, 0.35);
+  /* hidden below its spot until the landing triggers it */
+  opacity: 0;
+  transform: translateY(90px);
+  visibility: hidden;
+}
+.signup.risen {
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.7s ease 0.15s, transform 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.15s;
+}
+
+.signup-cover {
+  display: block;
+  width: 150px;
+  height: auto;
+  margin: 0 auto 22px;
+  border: 1px solid rgba(43, 140, 255, 0.35);
+  box-shadow: 0 0 30px rgba(26, 109, 255, 0.3);
+}
+.signup-eyebrow {
+  font-family: var(--display);
+  font-size: 10px;
+  letter-spacing: 0.45em;
+  color: var(--blue-bright);
+  margin-bottom: 14px;
+}
+.signup h2 {
+  font-family: var(--display);
+  font-size: clamp(18px, 2.4vw, 24px);
+  letter-spacing: 0.04em;
+  margin-bottom: 12px;
+}
+.signup-copy {
+  font-size: 15px;
+  color: var(--dim);
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.hp { display: none !important; }
+
+.form-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.form-row input {
+  flex: 1;
+  min-width: 0;
+  padding: 13px 16px;
+  background: rgba(4, 8, 20, 0.9);
+  border: 1px solid var(--blue-dim);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 15px;
+  outline: none;
+}
+.form-row input:focus-visible {
+  border-color: var(--blue-bright);
+  box-shadow: 0 0 0 2px rgba(43, 140, 255, 0.3);
+}
+.form-submit {
+  width: 100%;
+  padding: 13px 22px;
+  background: linear-gradient(180deg, var(--blue-bright), var(--blue));
+  border: none;
+  color: #fff;
+  font-family: var(--display);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: box-shadow 0.2s, transform 0.15s;
+}
+.form-submit:hover { box-shadow: 0 0 24px rgba(43, 140, 255, 0.6); }
+.form-submit:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+.form-submit:disabled { opacity: 0.6; cursor: wait; }
+
+.form-msg {
+  margin-top: 14px;
+  font-size: 14px;
+  min-height: 1.4em;
+}
+.form-msg.ok { color: #7ee7a8; }
+.form-msg.err { color: #ff8f8f; }
+
+.site-footer {
+  margin-top: 60px;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: rgba(142, 166, 207, 0.55);
+}
+
+/* ---------- keyboard focus, general ---------- */
+
+a:focus-visible { outline: 2px solid var(--blue-bright); outline-offset: 2px; }
+
+/* ---------- mobile ---------- */
+
+@media (max-width: 768px) {
+  #skyline {
+    background-image: url('assets/skyline-mobile.jpg?v=2');
+  }
+  /* on mobile the panels are full width, so scrim the whole lower half */
+  #skyline::after {
+    background:
+      linear-gradient(180deg, rgba(4,6,13,0.5) 0%, rgba(4,6,13,0.1) 30%, rgba(4,6,13,0.75) 100%);
+  }
+  #hud { top: 14px; right: 14px; }
+  .hud-deg { font-size: 16px; }
+  .hero { padding: 0 7vw; }
+  .chapter { min-height: 64vh; padding: 5vh 6vw; }
+  .panel { padding: 24px 22px 26px; }
+  .part-divider { padding: 10vh 6vw 2vh; flex-direction: column; gap: 8px; }
+  .form-row { flex-direction: column; }
+  .landing { min-height: 120vh; }
+}
+
+/* ---------- reduced motion: clean static layout ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-hint-line { animation: none; }
+}
+.reduced-motion .panel,
+.reduced-motion .hero-lockup,
+.reduced-motion .signup {
+  opacity: 1 !important;
+  transform: none !important;
+  visibility: visible !important;
+  filter: none !important;
+}
+.reduced-motion #hud { display: none; }
+.no-webgl #hud { display: none; }
+.no-webgl .scroll-hint { display: none; }
+.reduced-motion .scroll-hint { display: none; }
+.no-webgl .panel,
+.no-webgl .signup {
+  opacity: 1 !important;
+  transform: none !important;
+  visibility: visible !important;
+  filter: none !important;
+}
+
+/* ==========================================================================
+   Pull-quotes between chapters
+
+   Deliberately given NO position or z-index. #stage (the WebGL canvas) has
+   a transparent clear color, so it only paints opaque pixels where the
+   skater, halfpipe, or particles actually are -- everywhere else on the
+   canvas is see-through. Because this element has no explicit stacking of
+   its own, it paints BELOW that canvas in the browser's normal painting
+   order, while .hero / .chapter / .landing (which do have z-index) paint
+   above it. The net effect: as the skater rotates past a quote on scroll,
+   his silhouette passes in front of the text exactly where they overlap,
+   and the text is fully readable everywhere else. Don't add position or
+   z-index to .pull-quote, or this effect goes away.
+   ========================================================================== */
+
+.pull-quote {
+  max-width: 760px;
+  margin: 6vh auto 8vh;
+  padding: 0 8vw;
+  text-align: center;
+}
+.pull-quote p {
+  font-family: var(--display);
+  font-size: clamp(20px, 3vw, 32px);
+  line-height: 1.4;
+  color: var(--ink);
+  text-shadow: 0 0 30px rgba(26, 109, 255, 0.25);
+}
+.pull-quote cite {
+  display: block;
+  margin-top: 20px;
+  font-family: var(--body);
+  font-style: normal;
+  font-size: 14px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--blue-bright);
+}
+.pull-quote-final p {
+  color: var(--blue-bright);
+  text-shadow: 0 0 34px rgba(43, 140, 255, 0.4);
+}
+
+@media (max-width: 768px) {
+  .pull-quote { margin: 4vh auto 6vh; padding: 0 6vw; }
+}
+
+/* ==========================================================================
+   Footer + About-the-author panel
+   ========================================================================== */
+
+.site-footer {
+  margin-top: 70px;
+  width: min(1000px, 92vw);
+}
+.footer-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 30px;
+  flex-wrap: wrap;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--blue-dim);
+}
+.footer-about {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+.footer-photo {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border: 1px solid rgba(43, 140, 255, 0.5);
+  box-shadow: 0 0 18px rgba(26, 109, 255, 0.25);
+  flex-shrink: 0;
+}
+.footer-name {
+  font-family: var(--display);
+  font-size: 15px;
+  letter-spacing: 0.2em;
+  color: var(--ink);
+}
+.footer-role {
+  margin-top: 8px;
+  font-size: 14px;
+  color: var(--dim);
+  max-width: 40ch;
+}
+.bio-toggle {
+  margin-top: 14px;
+  background: none;
+  border: 1px solid var(--blue-dim);
+  color: var(--blue-bright);
+  font-family: var(--display);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 9px 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.bio-toggle:hover { border-color: var(--blue-bright); background: rgba(26, 109, 255, 0.12); }
+.footer-links-grid {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+}
+.footer-links-row {
+  display: flex;
+  gap: 22px;
+}
+.footer-links-row a {
+  color: var(--dim);
+  text-decoration: none;
+  letter-spacing: 0.04em;
+  transition: color 0.2s;
+  white-space: nowrap;
+}
+.footer-links-row a:hover { color: var(--blue-bright); }
+
+/* small-to-large: the top row (site + brand links) sits smaller and quieter,
+   the bottom row (social handles) reads larger, the more prominent call. */
+.footer-links-row--small a { font-size: 13px; }
+.footer-links-row--large a { font-size: 17px; font-family: var(--display); letter-spacing: 0.02em; }
+.footer-copy {
+  margin-top: 18px;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  color: rgba(142, 166, 207, 0.5);
+}
+
+.bio-panel {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  display: none;
+}
+.bio-panel.open { display: block; }
+.bio-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(2, 4, 10, 0.8);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+.bio-card {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: min(460px, 90vw);
+  padding: 60px 40px 40px;
+  overflow-y: auto;
+  background: linear-gradient(180deg, rgba(10, 18, 40, 0.98), rgba(6, 10, 24, 0.99));
+  border-left: 1px solid rgba(43, 140, 255, 0.45);
+  box-shadow: -20px 0 60px rgba(0, 0, 0, 0.5);
+  animation: bio-slide 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes bio-slide {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
+}
+.bio-eyebrow {
+  font-family: var(--display);
+  font-size: 10px;
+  letter-spacing: 0.4em;
+  color: var(--blue-bright);
+  margin-bottom: 10px;
+}
+.bio-name {
+  font-family: var(--display);
+  font-size: 26px;
+  color: var(--ink);
+  margin-bottom: 20px;
+}
+.bio-card p:not(.bio-eyebrow) {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--dim);
+  margin-bottom: 16px;
+}
+.faq-q {
+  font-family: var(--display);
+  font-size: 13px;
+  letter-spacing: 0.03em;
+  color: var(--blue-bright);
+  margin: 22px 0 8px;
+}
+.faq-q:first-of-type { margin-top: 4px; }
+.bio-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 20px;
+  margin-top: 24px;
+  padding-top: 22px;
+  border-top: 1px solid var(--blue-dim);
+}
+.bio-links a {
+  color: var(--blue-bright);
+  text-decoration: none;
+  font-family: var(--display);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  transition: color 0.2s;
+}
+.bio-links a:hover { color: var(--ink); }
+.bio-close {
+  position: absolute;
+  top: 18px;
+  right: 22px;
+  background: none;
+  border: none;
+  color: var(--dim);
+  font-size: 32px;
+  line-height: 1;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.bio-close:hover { color: var(--ink); }
+
+@media (max-width: 768px) {
+  .footer-inner { flex-direction: column; }
+  .footer-links-grid { align-items: flex-start; }
+  .footer-links-row { flex-wrap: wrap; gap: 14px; }
+}
+
+/* reduced motion: no slide */
+.reduced-motion .bio-card { animation: none; }

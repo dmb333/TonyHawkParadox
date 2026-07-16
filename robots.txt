@@ -1,0 +1,65 @@
+# robots.txt for tonyhawkparadox.com
+#
+# This is a promotional page for a book. The goal is maximum legitimate
+# visibility, so the default here is ALLOW across the board: standard search
+# engines, AI citation/retrieval crawlers, and AI training crawlers.
+#
+# That last one is a real choice, not an oversight. Training crawlers
+# (GPTBot, ClaudeBot, Google-Extended, Applebot-Extended, CCBot) feed model
+# training data rather than live citations. Blocking them costs nothing in
+# visibility but also gains nothing here, since there is no proprietary
+# content on this page to protect, only marketing copy meant to spread.
+# If you'd rather opt out of training specifically while keeping citation
+# visibility, uncomment the "Disallow: /" lines under the training block
+# below and leave the citation/retrieval block untouched.
+
+# ---------- standard search ----------
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# ---------- AI citation & retrieval crawlers ----------
+# These build the indexes AI engines cite from, and handle a user asking
+# an assistant about this specific page. Blocking these removes the site
+# from AI-generated answers.
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+# ---------- AI training crawlers ----------
+# Opt-out tokens and training bots. Allowed by default per the reasoning
+# above. To opt out of training while keeping citation visibility intact,
+# change these four "Allow: /" lines to "Disallow: /".
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# ---------- everything else ----------
+User-agent: *
+Allow: /
+
+Sitemap: https://tonyhawkparadox.com/sitemap.xml

@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Tony Hawk Paradox | When Video Games Predict Reality</title>
+<meta name="description" content="The Tony Hawk Paradox: a nonfiction book by David Borish arguing that video games and simulations have repeatedly predicted real-world capability, from the 1080 spin to DeepMind's methodology. Sign up to be notified at release.">
+<link rel="canonical" href="https://tonyhawkparadox.com/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#04060d">
+
+<!-- Favicons. Built from the small triangle emblem on the book cover's board graphic. -->
+<link rel="icon" href="/favicon.ico?v=2" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png?v=2">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16.png?v=2">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png?v=2">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png?v=2">
+
+<!-- Open Graph. og:type stays "website" since the legacy Facebook "book" type is inconsistently
+     supported; Book schema below (JSON-LD) carries the accurate structured book data instead. -->
+<meta property="og:title" content="The Tony Hawk Paradox">
+<meta property="og:description" content="When Video Games Predict Reality. A nonfiction book by David Borish.">
+<meta property="og:image" content="https://tonyhawkparadox.com/assets/cover.png">
+<meta property="og:image:width" content="1834">
+<meta property="og:image:height" content="1024">
+<meta property="og:image:alt" content="The Tony Hawk Paradox book cover: a skater suspended in a starfield above a halfpipe">
+<meta property="og:url" content="https://tonyhawkparadox.com/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="The Tony Hawk Paradox">
+<meta property="og:locale" content="en_US">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:creator" content="@davidborish">
+<meta name="twitter:title" content="The Tony Hawk Paradox">
+<meta name="twitter:description" content="When Video Games Predict Reality. A nonfiction book by David Borish.">
+<meta name="twitter:image" content="https://tonyhawkparadox.com/assets/cover.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Michroma for display type (wide, squared, matches the cover lockup). Saira for body and UI. -->
+<link href="https://fonts.googleapis.com/css2?family=Michroma&family=Saira:wght@300;400;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+
+<!-- Structured data: Book + Person + FAQPage. Kept in sync with the visible FAQ panel content
+     in the footer -- if you edit the FAQ text there, update the matching answers below too.
+     No ISBN or release date is included since neither exists yet; add them here once set,
+     rather than leaving placeholder values a crawler could take as real. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Book",
+  "name": "The Tony Hawk Paradox",
+  "alternateName": "When Video Games Predict Reality",
+  "author": { "@id": "https://tonyhawkparadox.com/#person" },
+  "description": "A nonfiction argument that video games and simulations have repeatedly predicted real-world capability before it existed, built into a documented case for simulation theory with falsifiable predictions.",
+  "image": "https://tonyhawkparadox.com/assets/cover.png",
+  "url": "https://tonyhawkparadox.com/",
+  "genre": "Philosophy / Simulation theory",
+  "inLanguage": "en"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "@id": "https://tonyhawkparadox.com/#person",
+  "name": "David Borish",
+  "url": "https://davidborish.com",
+  "jobTitle": "AI Strategist and Writer",
+  "sameAs": [
+    "https://www.davidborish.com/the-ai-spectator",
+    "https://www.linkedin.com/in/davidborish/",
+    "https://x.com/davidborish",
+    "https://instagram.com/davidborish",
+    "https://facebook.com/davidborish"
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is The Tony Hawk Paradox about?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The Tony Hawk Paradox is a nonfiction book by David Borish arguing that video games and simulations have repeatedly predicted real-world capability before it existed, from a 1080-degree skateboard spin invented as fantasy in a 1999 video game to DeepMind's approach of mastering games before real-world problems. The book builds this pattern into a documented, evidence-based case for simulation theory."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Who is David Borish?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "David Borish is an AI strategist and writer with twenty-five years of experience in technology innovation. He developed the Open-Prem Inflection Point framework and the Exponential Replacement Curve for projecting AI capability timelines, and has a track record of validated predictions, including forecasting China's AI surge months before DeepSeek's release triggered a market correction."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "When does the book release?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A release date has not been announced yet. Visitors can sign up on this page to be notified when the date is set, and for a chance to receive a complimentary signed copy."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is The Tony Hawk Paradox a work of fiction?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. It is a nonfiction argument grounded in documented quotes, technology timelines, and falsifiable predictions, not a novel."
+      }
+    }
+  ]
+}
+</script>
+
+<!-- Three.js as an ES module -->
+<script type="importmap">
+{ "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+<!-- GSAP + ScrollTrigger + Lenis -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+</head>
+<body>
+
+<!-- Skyline background. Sits behind the transparent 3D canvas.
+     EDIT: swap assets/skyline.jpg (and skyline-mobile.jpg) to change the art. -->
+<div id="skyline" aria-hidden="true"></div>
+
+<!-- Fixed 3D stage. Everything scrolls over this. -->
+<canvas id="stage" aria-hidden="true"></canvas>
+
+<!-- Static fallback shown only when WebGL is unavailable -->
+<div id="webgl-fallback" aria-hidden="true"></div>
+
+<!-- Landing flash overlay -->
+<div id="flash" aria-hidden="true"></div>
+
+<!-- Game-HUD spin counter. Low key, top right. -->
+<div id="hud" aria-hidden="true">
+  <div class="hud-label">SPIN</div>
+  <div class="hud-deg"><span id="hud-value">0000</span>&deg;</div>
+  <div class="hud-meter"><div id="hud-fill"></div></div>
+  <div class="hud-milestone" id="hud-milestone"></div>
+</div>
+
+<main id="content">
+
+  <!-- ============ HERO / TAKEOFF ============ -->
+  <section class="hero" id="hero">
+    <div class="hero-lockup">
+      <p class="hero-the">THE</p>
+      <h1 class="hero-title">TONY<br>HAWK</h1>
+      <p class="hero-paradox">P A R A D O X</p>
+      <p class="hero-sub">WHEN VIDEO GAMES PREDICT REALITY</p>
+      <p class="hero-byline">BY: DAVID BORISH</p>
+    </div>
+    <div class="scroll-hint" aria-hidden="true">
+      <span>SCROLL TO SPIN</span>
+      <span class="scroll-hint-line"></span>
+    </div>
+  </section>
+
+  <!-- ============ CHAPTERS ============
+       EDIT HERE: chapter teaser copy is placeholder. Replace the <p class="teaser"> text.
+       EDIT HERE: each icon is an inline SVG inside <div class="icon">. To use final art,
+       replace the <svg> with <img src="assets/your-image.png" alt=""> and it will inherit
+       the same reveal animation. Keep images roughly square.
+  -->
+
+  <section class="chapter">
+    <div class="panel">
+      <div class="panel-top">
+        <span class="level">CHAPTER 1</span>
+        <div class="icon" aria-hidden="true">
+          <svg viewBox="0 0 48 48" fill="none"><path d="M6 42h36M6 42V6"/><path d="M10 36l9-9 7 5 12-16"/><path d="M32 16h6v6"/></svg>
+        </div>
+      </div>
+      <h2>The Fantastical Became Real</h2>
+      <p class="teaser">In April 2025 Tony Hawk revealed that tricks designed as impossible fantasy in the 1999 game later became routine in real skateboarding. The game came first. Reality came second.</p>
+    </div>
+  </section>
+
+  <blockquote class="pull-quote">
+    <p>&ldquo;It was like, this would be amazing, but you can't do it in real life. Now they do that.&rdquo;</p>
+    <cite>Tony Hawk, April 2025</cite>
+  </blockquote>
+
+  <section class="chapter">
+    <div class="panel">
+      <div class="panel-top">
+        <span class="level">CHAPTER 2</span>
+        <div class="icon" aria-hidden="true">
+          <svg viewBox="0 0 48 48" fill="none"><path d="M6 42h36M6 42V6"/><path d="M8 40c14 0 22-4 28-30"/><circle cx="36" cy="10" r="2.5"/></svg>
+        </div>
+      </div>
+      <h2>Games as Proving Grounds</h2>
+      <p class="teaser">Demis Hassabis: games are the proving ground for DeepMind's algorithms. Boston Dynamics trains Atlas across 4,000 simulations, then transfers the skill perfectly. Prove it in simulation, deploy in reality.</p>
+    </div>
+  </section>
+
+  <section class="chapter">
+    <div class="panel">
+      <div class="panel-top">
+        <span class="level">CHAPTER 3</span>
+        <div class="icon" aria-hidden="true">
+          <svg viewBox="0 0 48 48" fill="none"><rect x="12" y="20" width="24" height="16" rx="2"/><path d="M17 20v-6a7 7 0 0 1 13-3"/><path d="M24 26v5"/><path d="M8 42h32M8 42h14" stroke-width="3"/></svg>
+        </div>
+      </div>
+      <h2>The Unlocking Pattern</h2>
+      <p class="teaser">The pattern extends across five domains: athletics, the Flynn Effect, technology curves, parenting, and mental rehearsal. If deliberate practice explains only 18 to 26 percent of performance, what explains the rest?</p>
+    </div>
+  </section>
+
+  <blockquote class="pull-quote">
+    <p>&ldquo;Games are always just the proving ground for our algorithms.&rdquo;</p>
+    <cite>Demis Hassabis, Google DeepMind</cite>
+  </blockquote>
+
+  <section class="chapter">
+    <div class="panel">
+      <div class="panel-top">
+        <span class="level">CHAPTER 4</span>
+        <div class="icon" aria-hidden="true">
+          <svg viewBox="0 0 48 48" fill="none"><path d="M4 12h24M4 20h24M4 28h20M10 6v28M18 6v26"/><circle cx="30" cy="24" r="10"/><path d="M37 31l7 7"/></svg>
+        </div>
+      </div>
+      <h2>Pattern Recognition</h2>
+      <p class="teaser">Twenty-five years of reading patterns across industries. The China AI call in July 2024, dismissed as alarmist, validated six months later by DeepSeek's trillion-dollar market correction.</p>
+    </div>
+  </section>
+
+  <section class="chapter">
+    <div class="panel">
+      <div class="panel-top">
+        <span class="level">CHAPTER 5</span>
+        <div class="icon" aria-hidden="true">
+          <svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="10"/><path d="M24 4v6M24 38v6M4 24h6M38 24h6M10 10l4 4M34 34l-4-4M10 38l4-4M34 14l-4 4"/></svg>
+        </div>
+      </div>
+      <h2>What the Ancients Knew</h2>
+      <p class="teaser">Hindu Maya, Plato's Cave, Buddhist awakening, the Gnostic Demiurge. Independent traditions across millennia described a simulation-like reality using pre-technological language.</p>
+    </div>
+  </section>
+
+  <blockquote class="pull-quote">
+    <p>&ldquo;The methodology is becoming standard: prove it in simulation, then deploy in reality.&rdquo;</p>
+    <cite>David Borish</cite>
+  </blockquote>
+
+  <section class="chapter">
+    <div class="panel">
+      <div class="panel-top">
+        <span class="level">CHAPTER 6</span>
+        <div class="icon" aria-hidden="true">
+          <svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="8" r="3.5"/><circle cx="12" cy="24" r="3.5"/><circle cx="36" cy="24" r="3.5"/><circle cx="7" cy="40" r="3"/><circle cx="17" cy="40" r="3"/><circle cx="36" cy="40" r="3"/><path d="M22 11l-8 10M26 11l8 10M11 27l-3 10M13 27l3 10M36 28v9"/></svg>
+        </div>
+      </div>
+      <h2>Inference to the Best Explanation</h2>
+      <p class="teaser">Base-level reality struggles to explain the Tony Hawk phenomenon, DeepMind's methodology, and cross-domain unlocking. Simulation theory offers a unified explanation. Presented as inference, not proof.</p>
+    </div>
+  </section>
+
+  <section class="chapter">
+    <div class="panel">
+      <div class="panel-top">
+        <span class="level">CHAPTER 7</span>
+        <div class="icon" aria-hidden="true">
+          <svg viewBox="0 0 48 48" fill="none"><rect x="6" y="14" width="36" height="20" rx="3"/><circle cx="16" cy="24" r="4"/><circle cx="32" cy="24" r="4"/><path d="M2 20v8M46 20v8"/></svg>
+        </div>
+      </div>
+      <h2>The VR Convergence</h2>
+      <p class="teaser">VR resolution has climbed from 7 pixels per degree in 2015 to over 60 today, nearing the human threshold. Neural interfaces remove the hardware limits. Indistinguishable simulation is measurably close.</p>
+    </div>
+  </section>
+
+  <blockquote class="pull-quote">
+    <p>&ldquo;The game came first. Reality came second. This is not an anomaly. It is evidence of something fundamental about reality itself.&rdquo;</p>
+    <cite>David Borish</cite>
+  </blockquote>
+
+  <section class="chapter">
+    <div class="panel">
+      <div class="panel-top">
+        <span class="level">CHAPTER 8</span>
+        <div class="icon" aria-hidden="true">
+          <svg viewBox="0 0 48 48" fill="none"><path d="M6 42h36M6 42V6"/><path d="M6 42L38 10"/><circle cx="16" cy="32" r="1.6"/><circle cx="26" cy="22" r="1.6"/><circle cx="36" cy="12" r="1.6"/></svg>
+        </div>
+      </div>
+      <h2>Reading the Schedule</h2>
+      <p class="teaser">The Exponential Replacement Curve applied to five domains with dated thresholds: autonomous vehicles (Waymo, confirmed 2024), humanoid robotics, brain-computer interfaces, quantum computing, and VR.</p>
+    </div>
+  </section>
+
+  <section class="chapter">
+    <div class="panel">
+      <div class="panel-top">
+        <span class="level">CHAPTER 9</span>
+        <div class="icon" aria-hidden="true">
+          <svg viewBox="0 0 48 48" fill="none"><circle cx="8" cy="12" r="3"/><circle cx="8" cy="36" r="3"/><circle cx="24" cy="8" r="3"/><circle cx="24" cy="24" r="3"/><circle cx="24" cy="40" r="3"/><circle cx="40" cy="18" r="3"/><circle cx="40" cy="30" r="3"/><path d="M11 12l10-3M11 13l10 9M11 35l10-9M11 36l10 3M27 9l10 8M27 24l10-5M27 25l10 4M27 39l10-8"/></svg>
+        </div>
+      </div>
+      <h2>What This Might Mean for AI Development</h2>
+      <p class="teaser">If capabilities unlock on schedules, AI may follow predetermined timelines. AGI arrival, open-source convergence, China's surge as scheduled rather than surprising, and the race to build navigable worlds.</p>
+    </div>
+  </section>
+
+  <blockquote class="pull-quote">
+    <p>&ldquo;Games inspire reality, versus documented evidence that games precede it: the distinction the book insists on.&rdquo;</p>
+    <cite>David Borish</cite>
+  </blockquote>
+
+  <section class="chapter">
+    <div class="panel">
+      <div class="panel-top">
+        <span class="level">CHAPTER 10</span>
+        <div class="icon" aria-hidden="true">
+          <svg viewBox="0 0 48 48" fill="none"><path d="M24 6v32M14 42h20M24 10l-12 4m12-4l12 4"/><path d="M6 26l6-12 6 12a6 6 0 0 1-12 0z"/><path d="M30 26l6-12 6 12a6 6 0 0 1-12 0z"/></svg>
+        </div>
+      </div>
+      <h2>Objections and Dismissal Patterns</h2>
+      <p class="teaser">Serious engagement with the strongest counterarguments, from the Bannister Effect to correlation versus causation, each answered directly. Ends with explicit conditions that would change the author's mind.</p>
+    </div>
+  </section>
+
+  <section class="chapter">
+    <div class="panel">
+      <div class="panel-top">
+        <span class="level">CHAPTER 11</span>
+        <div class="icon" aria-hidden="true">
+          <svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="17"/><path d="M19 18a5 5 0 1 1 7 6c-2 1.5-2 2.5-2 4"/><path d="M24 33v1.5"/></svg>
+        </div>
+      </div>
+      <h2>Living With Uncertainty</h2>
+      <p class="teaser">If the hypothesis holds, daily life does not change and meaning stays real. Reading the rules enables better play. The four-minute mile showed that the right response to a limit is to test it.</p>
+    </div>
+  </section>
+
+  <blockquote class="pull-quote">
+    <p>&ldquo;The appropriate response to a limit is testing, not automatic acceptance.&rdquo;</p>
+    <cite>David Borish</cite>
+  </blockquote>
+
+  <section class="chapter">
+    <div class="panel panel-epilogue">
+      <div class="panel-top">
+        <span class="level">EPILOGUE</span>
+        <div class="icon" aria-hidden="true">
+          <svg viewBox="0 0 48 48" fill="none"><rect x="6" y="10" width="36" height="32" rx="2"/><path d="M6 18h36M14 6v8M34 6v8"/><circle cx="31" cy="30" r="4"/><path d="M12 26h6M12 34h6M21 26h4"/></svg>
+        </div>
+      </div>
+      <h2>Testable Predictions</h2>
+      <p class="teaser">Five formal predictions with explicit dates and falsification conditions, spanning robotics, brain-computer interfaces, quantum computing, and VR. Check back in 2030. If I'm wrong, I want to know.</p>
+    </div>
+  </section>
+
+  <!-- ============ LANDING + SIGNUP ============ -->
+  <section class="landing" id="landing">
+    <div class="signup" id="signup">
+      <img class="signup-cover" src="assets/book-cover-3d.jpg?v=2" alt="The Tony Hawk Paradox book cover, standing 3D mockup" width="210" height="283">
+      <h2>Sign up below</h2>
+      <p class="signup-copy">Be notified of the release date, and for a chance to get a complimentary signed copy of the book.</p>
+
+      <!-- Formspree endpoint is wired to the live form:
+           https://formspree.io/f/mvzyzqaw -->
+      <form id="signup-form" action="https://formspree.io/f/mvzyzqaw" method="POST" novalidate>
+        <!-- Honeypot: bots fill this, humans never see it. Leave as is. -->
+        <input type="text" name="_gotcha" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <div class="form-row">
+          <label class="sr-only" for="name">Name</label>
+          <input type="text" id="name" name="name" placeholder="Your name" autocomplete="name">
+          <label class="sr-only" for="email">Email address</label>
+          <input type="email" id="email" name="email" placeholder="you@example.com" required autocomplete="email">
+        </div>
+        <button type="submit" id="submit-btn" class="form-submit">Notify me</button>
+        <p class="form-msg" id="form-msg" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <div class="footer-about">
+          <img class="footer-photo" src="assets/author.jpg?v=2" alt="David Borish" width="60" height="60">
+          <div class="footer-about-text">
+            <p class="footer-name">DAVID BORISH</p>
+            <p class="footer-role">AI strategist, writer, and author of The Tony Hawk Paradox.</p>
+            <button class="bio-toggle" id="bio-toggle">About the author</button>
+            <button class="bio-toggle" id="faq-toggle">FAQ</button>
+          </div>
+        </div>
+        <div class="footer-links-grid">
+          <div class="footer-links-row footer-links-row--small">
+            <a href="https://davidborish.com" target="_blank" rel="noopener">DavidBorish.com</a>
+            <a href="https://www.davidborish.com/the-ai-spectator" target="_blank" rel="noopener">The AI Spectator</a>
+            <a href="https://www.linkedin.com/in/davidborish/" target="_blank" rel="noopener">LinkedIn</a>
+          </div>
+          <div class="footer-links-row footer-links-row--large">
+            <a href="https://x.com/davidborish" target="_blank" rel="noopener">X.com</a>
+            <a href="https://instagram.com/davidborish" target="_blank" rel="noopener">Instagram</a>
+            <a href="https://facebook.com/davidborish" target="_blank" rel="noopener">Facebook</a>
+          </div>
+        </div>
+      </div>
+      <p class="footer-copy">&copy; 2026 David Borish. The Tony Hawk Paradox.</p>
+    </footer>
+  </section>
+
+</main>
+
+<!-- ============ ABOUT-THE-AUTHOR PANEL ============
+     Slides in when "About the author" is clicked. -->
+<div id="bio-panel" class="bio-panel" aria-hidden="true">
+  <div class="bio-backdrop" data-bio-close></div>
+  <aside class="bio-card" role="dialog" aria-modal="true" aria-label="About the author">
+    <button class="bio-close" data-bio-close aria-label="Close">&times;</button>
+    <p class="bio-eyebrow">ABOUT THE AUTHOR</p>
+    <h2 class="bio-name">David Borish</h2>
+    <p>David Borish is an AI strategist and writer with twenty-five years of experience in technology innovation across seven industries. He is a keynote speaker, NYU guest lecturer, and writer for The AI Spectator, with coverage in Forbes, TechCrunch, and The Canadian Press.</p>
+    <p>He developed the Open-Prem Inflection Point framework and the Exponential Replacement Curve for projecting AI capability timelines. His work is known for a track record of validated predictions, including forecasting China's AI surge six months before DeepSeek triggered a trillion-dollar market correction.</p>
+    <p>His practitioner background includes co-founding Moguls Mobile with Daymond John, where he executed the first documented VR headset sale on television, and building a high-speed 360-degree camera rig used at Sundance.</p>
+    <nav class="bio-links" aria-label="Author links">
+      <a href="https://davidborish.com" target="_blank" rel="noopener">DavidBorish.com</a>
+      <a href="https://www.davidborish.com/the-ai-spectator" target="_blank" rel="noopener">The AI Spectator</a>
+      <a href="https://www.linkedin.com/in/davidborish/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://x.com/davidborish" target="_blank" rel="noopener">X.com</a>
+      <a href="https://instagram.com/davidborish" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://facebook.com/davidborish" target="_blank" rel="noopener">Facebook</a>
+    </nav>
+  </aside>
+</div>
+
+<!-- ============ FAQ PANEL ============
+     Slides in when "FAQ" is clicked. Content here is mirrored word for word
+     in the FAQPage JSON-LD in <head> -- if you edit an answer here, update
+     the matching entry there too, so the two stay in sync. -->
+<div id="faq-panel" class="bio-panel" aria-hidden="true">
+  <div class="bio-backdrop" data-faq-close></div>
+  <aside class="bio-card" role="dialog" aria-modal="true" aria-label="Frequently asked questions">
+    <button class="bio-close" data-faq-close aria-label="Close">&times;</button>
+    <p class="bio-eyebrow">FAQ</p>
+    <h2 class="bio-name">Questions</h2>
+    <h3 class="faq-q">What is The Tony Hawk Paradox about?</h3>
+    <p>The Tony Hawk Paradox is a nonfiction book by David Borish arguing that video games and simulations have repeatedly predicted real-world capability before it existed, from a 1080-degree skateboard spin invented as fantasy in a 1999 video game to DeepMind's approach of mastering games before real-world problems. The book builds this pattern into a documented, evidence-based case for simulation theory.</p>
+    <h3 class="faq-q">Who is David Borish?</h3>
+    <p>David Borish is an AI strategist and writer with twenty-five years of experience in technology innovation. He developed the Open-Prem Inflection Point framework and the Exponential Replacement Curve for projecting AI capability timelines, and has a track record of validated predictions, including forecasting China's AI surge months before DeepSeek's release triggered a market correction.</p>
+    <h3 class="faq-q">When does the book release?</h3>
+    <p>A release date has not been announced yet. Sign up on this page to be notified when the date is set, and for a chance to receive a complimentary signed copy.</p>
+    <h3 class="faq-q">Is The Tony Hawk Paradox a work of fiction?</h3>
+    <p>No. It is a nonfiction argument grounded in documented quotes, technology timelines, and falsifiable predictions, not a novel.</p>
+  </aside>
+</div>
+
+<script type="module" src="main.js"></script>
+</body>
+</html>
