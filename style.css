@@ -527,19 +527,16 @@ a:focus-visible { outline: 2px solid var(--blue-bright); outline-offset: 2px; }
 /* ==========================================================================
    Pull-quotes between chapters
 
-   Deliberately given NO position or z-index. #stage (the WebGL canvas) has
-   a transparent clear color, so it only paints opaque pixels where the
-   skater, halfpipe, or particles actually are -- everywhere else on the
-   canvas is see-through. Because this element has no explicit stacking of
-   its own, it paints BELOW that canvas in the browser's normal painting
-   order, while .hero / .chapter / .landing (which do have z-index) paint
-   above it. The net effect: as the skater rotates past a quote on scroll,
-   his silhouette passes in front of the text exactly where they overlap,
-   and the text is fully readable everywhere else. Don't add position or
-   z-index to .pull-quote, or this effect goes away.
+   Given position + z-index like .hero / .chapter / .landing, so they sit
+   above the canvas and stay fully readable at all times. (An earlier
+   version deliberately left this unpositioned so the skater's silhouette
+   would occlude the text as he passed over it -- that didn't read the way
+   it was meant to and was reverted.)
    ========================================================================== */
 
 .pull-quote {
+  position: relative;
+  z-index: 10;
   max-width: 760px;
   margin: 6vh auto 8vh;
   padding: 0 8vw;
@@ -590,12 +587,13 @@ a:focus-visible { outline: 2px solid var(--blue-bright); outline-offset: 2px; }
 }
 .footer-about {
   display: flex;
-  align-items: flex-start;
+  align-items: stretch;
   gap: 16px;
 }
 .footer-photo {
-  width: 60px;
-  height: 60px;
+  width: 84px;
+  height: auto;      /* stretches to match the text block's full height */
+  aspect-ratio: auto; /* overrides the implicit 1:1 ratio from the img's width/height attributes below */
   object-fit: cover;
   border: 1px solid rgba(43, 140, 255, 0.5);
   box-shadow: 0 0 18px rgba(26, 109, 255, 0.25);
