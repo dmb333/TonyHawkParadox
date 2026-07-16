@@ -370,7 +370,7 @@ body {
 .signup {
   width: min(520px, 100%);
   text-align: center;
-  padding: 38px 34px 34px;
+  padding: 26px 34px 28px;
   background: linear-gradient(180deg, rgba(10, 18, 40, 0.9), rgba(6, 10, 24, 0.95));
   border: 1px solid rgba(43, 140, 255, 0.45);
   box-shadow:
@@ -391,9 +391,9 @@ body {
 
 .signup-cover {
   display: block;
-  width: 150px;
+  width: 108px;
   height: auto;
-  margin: 0 auto 22px;
+  margin: 0 auto 14px;
   border: 1px solid rgba(43, 140, 255, 0.35);
   box-shadow: 0 0 30px rgba(26, 109, 255, 0.3);
 }
@@ -414,7 +414,7 @@ body {
   font-size: 15px;
   color: var(--dim);
   line-height: 1.6;
-  margin-bottom: 24px;
+  margin-bottom: 18px;
 }
 
 .hp { display: none !important; }
@@ -466,13 +466,6 @@ body {
 }
 .form-msg.ok { color: #7ee7a8; }
 .form-msg.err { color: #ff8f8f; }
-
-.site-footer {
-  margin-top: 60px;
-  font-size: 12px;
-  letter-spacing: 0.08em;
-  color: rgba(142, 166, 207, 0.55);
-}
 
 /* ---------- keyboard focus, general ---------- */
 
@@ -573,7 +566,7 @@ a:focus-visible { outline: 2px solid var(--blue-bright); outline-offset: 2px; }
    ========================================================================== */
 
 .site-footer {
-  margin-top: 70px;
+  margin-top: 40px;
   width: min(1000px, 92vw);
 }
 .footer-inner {
