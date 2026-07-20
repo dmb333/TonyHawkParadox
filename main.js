@@ -84,7 +84,8 @@ const disposables = []; // geometries and materials to clean up on teardown
 function track(obj) { disposables.push(obj); return obj; }
 
 /* Shared skater materials. Declared here, before the scene builds, since
-   buildSkaterRig() (called from initScene) needs them to already exist. */
+   buildSkaterRig() (called only if loadSkater() genuinely fails) needs
+   them to already exist. */
 const bodyMat = new THREE.MeshBasicMaterial({ color: BODY_DARK });
 const edgeMat = new THREE.LineBasicMaterial({ color: BLUE, transparent: true, opacity: 0.95 });
 track(bodyMat); track(edgeMat);
@@ -127,12 +128,13 @@ function initScene() {
   renderer.setClearColor(0x000000, 0);   // fully transparent clear
 
   buildPlexus();
-  buildSkaterRig();   // placeholder box figure, replaced when the model loads
+  createRig();        // empty rig container only -- see comment on createRig()
   buildHalfpipe();
   buildBurst();
   buildCityLights();
   addLights();
-  loadSkater();       // async: swaps in the real model when it arrives
+  loadSkater();       // async: swaps in the real model when it arrives,
+                       // and only builds the box fallback if it genuinely fails
 
   positionForViewport();
   window.addEventListener('resize', onResize);
@@ -282,6 +284,7 @@ function loadSkater() {
 
       if (!geo) {
         console.warn('Skater model has no mesh, using box fallback.');
+        buildSkaterRig();
         return;
       }
 
@@ -301,8 +304,10 @@ function loadSkater() {
       }
       rig.add(skaterModel);
     },
+    undefined,
     (err) => {
       console.warn('Skater model failed to load, using box fallback.', err);
+      buildSkaterRig();   // only built now, as a genuine fallback
     }
   );
 }
@@ -332,8 +337,19 @@ function limb(a, b, thickness, depth) {
   return part;
 }
 
-function buildSkaterRig() {
+/* Empty rig container, added to the scene immediately during init so that
+   positionForViewport() and every frame of renderFrame() always have a
+   rig to act on. Deliberately does NOT build the box figure -- that only
+   happens inside buildSkaterRig(), called from loadSkater()'s error path,
+   so the box figure never flashes on screen while the real model is
+   loading normally (which is the common case). */
+function createRig() {
   rig = new THREE.Group();
+  rig.rotation.z = 0.3;   // airborne tilt, eased out at the landing
+  scene.add(rig);
+}
+
+function buildSkaterRig() {
   boardGroup = new THREE.Group();
   skaterGroup = new THREE.Group();
 
@@ -400,8 +416,6 @@ function buildSkaterRig() {
   skaterGroup.add(glowPart(new THREE.IcosahedronGeometry(0.19, 0), J.head));
 
   rig.add(boardGroup, skaterGroup);
-  rig.rotation.z = 0.3;   // airborne tilt, eased out at the landing
-  scene.add(rig);
 }
 
 /* ---------- halfpipe: swept U cross-section rendered as a glowing grid ---------- */
