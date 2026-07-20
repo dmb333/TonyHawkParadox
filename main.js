@@ -84,8 +84,7 @@ const disposables = []; // geometries and materials to clean up on teardown
 function track(obj) { disposables.push(obj); return obj; }
 
 /* Shared skater materials. Declared here, before the scene builds, since
-   buildSkaterRig() (called only if loadSkater() genuinely fails) needs
-   them to already exist. */
+   buildSkaterRig() (called from initScene) needs them to already exist. */
 const bodyMat = new THREE.MeshBasicMaterial({ color: BODY_DARK });
 const edgeMat = new THREE.LineBasicMaterial({ color: BLUE, transparent: true, opacity: 0.95 });
 track(bodyMat); track(edgeMat);
@@ -94,14 +93,11 @@ track(bodyMat); track(edgeMat);
    Declared up here, before initScene() runs, since loadSkater() needs them.
 
    EDIT: DEFAULT_STYLE picks the look on load: 'edges', 'wire', or 'rim'.
-   EDIT: MODEL_SCALE if the figure reads too large or small. Recalculated
-   for this model's proportions (wider/shallower bbox than the previous
-   one) to roughly match the previous figure's on-screen height -- treat
-   as a starting point, not a guarantee, since it hasn't been seen live.
+   EDIT: MODEL_SCALE if the figure reads too large or small.
    EDIT: MODEL_TILT to add x-rotation if the pose sits at a wrong angle. */
 const DEFAULT_STYLE = 'edges';
-const MODEL_PATH = 'assets/skater.glb?v=3';
-const MODEL_SCALE = 4.5;
+const MODEL_PATH = 'assets/skater.glb?v=2';
+const MODEL_SCALE = 2.6;
 const MODEL_TILT = 0.0;
 
 let skaterModel = null;    // the loaded mesh group
@@ -131,13 +127,12 @@ function initScene() {
   renderer.setClearColor(0x000000, 0);   // fully transparent clear
 
   buildPlexus();
-  createRig();        // empty rig container only -- see comment on createRig()
+  buildSkaterRig();   // placeholder box figure, replaced when the model loads
   buildHalfpipe();
   buildBurst();
   buildCityLights();
   addLights();
-  loadSkater();       // async: swaps in the real model when it arrives,
-                       // and only builds the box fallback if it genuinely fails
+  loadSkater();       // async: swaps in the real model when it arrives
 
   positionForViewport();
   window.addEventListener('resize', onResize);
@@ -287,7 +282,6 @@ function loadSkater() {
 
       if (!geo) {
         console.warn('Skater model has no mesh, using box fallback.');
-        buildSkaterRig();
         return;
       }
 
@@ -300,23 +294,21 @@ function loadSkater() {
       skaterModel.scale.setScalar(MODEL_SCALE);
       skaterModel.rotation.x = MODEL_TILT;
 
-      // swap out the placeholder box figure, if one was ever built
+      // swap out the placeholder box figure
       if (skaterGroup) {
         rig.remove(skaterGroup);
         rig.remove(boardGroup);
       }
       rig.add(skaterModel);
     },
-    undefined,
     (err) => {
       console.warn('Skater model failed to load, using box fallback.', err);
-      buildSkaterRig();   // only built now, as a genuine fallback
     }
   );
 }
 
 /* ---------- fallback figure: hand-built boxes, used only if the model
-     does not load. Kept so the page never renders empty. ---------- */
+     does not load. Kept so the page always renders something. ---------- */
 
 function glowPart(geometry, position, rotation) {
   track(geometry);
@@ -340,22 +332,8 @@ function limb(a, b, thickness, depth) {
   return part;
 }
 
-/* Empty rig container, added to the scene immediately during init so that
-   positionForViewport() and every frame of renderFrame() always have a
-   rig to act on. Deliberately does NOT build the box figure -- that only
-   happens inside buildSkaterRig(), called from loadSkater()'s error path.
-   This is the fix for the "line-drawn figure flashes before the real model
-   loads" issue: previously the box figure was built unconditionally on
-   every page load and simply swapped out once the real model arrived,
-   which is exactly what caused that flash. Now it is only ever built if
-   the model genuinely fails. */
-function createRig() {
-  rig = new THREE.Group();
-  rig.rotation.z = 0.3;   // airborne tilt, eased out at the landing
-  scene.add(rig);
-}
-
 function buildSkaterRig() {
+  rig = new THREE.Group();
   boardGroup = new THREE.Group();
   skaterGroup = new THREE.Group();
 
@@ -422,6 +400,8 @@ function buildSkaterRig() {
   skaterGroup.add(glowPart(new THREE.IcosahedronGeometry(0.19, 0), J.head));
 
   rig.add(boardGroup, skaterGroup);
+  rig.rotation.z = 0.3;   // airborne tilt, eased out at the landing
+  scene.add(rig);
 }
 
 /* ---------- halfpipe: swept U cross-section rendered as a glowing grid ---------- */
